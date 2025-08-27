@@ -4,99 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0f5af570-ef09-4b9e-82d3-6eeb0cbf8162" name="Changes" comment="add files">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="0f5af570-ef09-4b9e-82d3-6eeb0cbf8162" name="Changes" comment="change directory">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/gpu_usage.png" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/gpu_usage.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/qwen_eval.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/qwen_eval.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/qwen_sft.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/qwen_sft.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/qwen_webui.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/qwen_webui.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/r1_distill.py" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/r1_distill.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/r1_distill.txt" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/r1_distill.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/tensorboard.png" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/tensorboard.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/DeepSeek-Distill-Qwen-For-Child/webui.png" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/DeepSeek-Distill-Qwen-For-Child/webui.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/asr-ctc/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/asr-ctc/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/asr-ctc/asr.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/asr-ctc/asr.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/asr-ctc/process_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/asr-ctc/process_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/asr-ctc/refs/详解CTC - 知乎.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/asr-ctc/refs/详解CTC - 知乎.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/asr-ctc/tokenizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/asr-ctc/tokenizer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/clip-model.png" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/clip-model.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/clip.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/clip.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/CV/mnist-vit/dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/image.png" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/image.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/img_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/img_encoder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/inference.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/inference.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/model.pth" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/model.pth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/refs/CV大模型系列之：多模态经典之作CLIP，探索图文结合的奥秘 - 掘金.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/refs/CV大模型系列之：多模态经典之作CLIP，探索图文结合的奥秘 - 掘金.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/resnet-block.svg" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/resnet-block.svg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/simliar_image.png" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/simliar_image.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/text_encoder.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/text_encoder.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-clip/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-clip/dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/diffusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/diffusion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/dit.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/dit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/dit_block.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/dit_block.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/dits.png" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/dits.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/inference.png" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/inference.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/inference.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/inference.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/refs/paper.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/refs/paper.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/refs/十分钟读懂Diffusion：图解Diffusion扩散模型.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/refs/十分钟读懂Diffusion：图解Diffusion扩散模型.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/refs/扩散模型解读 (一)：DiT 详细解读 - 知乎.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/refs/扩散模型解读 (一)：DiT 详细解读 - 知乎.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/time_emb.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/time_emb.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-dits/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-vit/5.png" beforeDir="false" afterPath="$PROJECT_DIR$/CV/mnist-vit/5.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-vit/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/CV/mnist-vit/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-vit/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/mnist-dits/dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-vit/inference.py" beforeDir="false" afterPath="$PROJECT_DIR$/CV/mnist-vit/inference.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-vit/refs/CV大模型系列之：全面解读VIT，它到底给植树人挖了多少坑 - 掘金.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/CV/mnist-vit/refs/CV大模型系列之：全面解读VIT，它到底给植树人挖了多少坑 - 掘金.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-vit/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/CV/mnist-vit/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-vit/vit.png" beforeDir="false" afterPath="$PROJECT_DIR$/CV/mnist-vit/vit.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/mnist-vit/vit.py" beforeDir="false" afterPath="$PROJECT_DIR$/CV/mnist-vit/vit.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/ner-bert-crf/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/ner-bert-crf/data/train.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/ner-bert-crf/data/train_label.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/ner-bert-crf/dataset.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/ner-bert-crf/model.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/ner-bert-crf/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/ner-bert-crf/train.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/conv_block.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/conv_block.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/cross_attn.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/cross_attn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/denoise.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/denoise.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/diffusion.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/diffusion.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/lora.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/lora.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/lora_finetune.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/lora_finetune.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/refs/B站up视频.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/refs/B站up视频.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/refs/stable-unet.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/refs/stable-unet.jpg" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/refs/unet.png" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/refs/unet.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/refs/一文弄懂 Diffusion Model.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/refs/一文弄懂 Diffusion Model.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/refs/利用LoRA对LLM进行参数高效的微调.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/refs/利用LoRA对LLM进行参数高效的微调.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/refs/十分钟读懂Diffusion：图解Diffusion扩散模型.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/refs/十分钟读懂Diffusion：图解Diffusion扩散模型.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/stable-inference.png" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/stable-inference.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/time_position_emb.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/time_position_emb.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/train.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/train.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/pytorch-diffusion/unet.py" beforeDir="false" afterPath="$PROJECT_DIR$/Diffusion/pytorch-diffusion/unet.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/qwen2.5-0.5b-grpo/QwenGRPO.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/qwen2.5-0.5b-grpo/QwenGRPO.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/qwen2.5-0.5b-grpo/QwenTest.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/qwen2.5-0.5b-grpo/QwenTest.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/qwen2.5-0.5b-grpo/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/qwen2.5-0.5b-grpo/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/qwen2.5-0.5b-grpo/refs/grpo/DeepSeek-R1 GRPO原理.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/qwen2.5-0.5b-grpo/refs/grpo/DeepSeek-R1 GRPO原理.pptx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/qwen2.5-0.5b-grpo/refs/grpo/GRPO：Group Relative Policy Optimization.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/qwen2.5-0.5b-grpo/refs/grpo/GRPO：Group Relative Policy Optimization.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/qwen2.5-0.5b-grpo/refs/grpo/grpo.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/qwen2.5-0.5b-grpo/refs/grpo/grpo.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/qwen2.5-0.5b-grpo/refs/ppo/【RLHF】想训练ChatGPT？得先弄明白Reward Model怎么训（附源码）.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/qwen2.5-0.5b-grpo/refs/ppo/【RLHF】想训练ChatGPT？得先弄明白Reward Model怎么训（附源码）.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/qwen2.5-0.5b-grpo/refs/ppo/拆解大语言模型RLHF中的PPO.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/qwen2.5-0.5b-grpo/refs/ppo/拆解大语言模型RLHF中的PPO.pdf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/qwen2.5-0.5b-grpo/tensorboard.png" beforeDir="false" afterPath="$PROJECT_DIR$/LLM_LMM/qwen2.5-0.5b-grpo/tensorboard.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/transformer-asr/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/transformer-asr/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/transformer-asr/asr.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/transformer-asr/asr.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/transformer-asr/process_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/transformer-asr/process_data.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/OwenLiang/transformer-asr/refs/包教包会！从零实现基于Transformer的语音识别(ASR)模型 - 知乎.pdf" beforePathEscaped="$PROJECT_DIR$/OwenLiang/transformer-asr/refs/包教包会！从零实现基于Transformer的语音识别(ASR)模型😘 - 知乎.pdf" beforeDir="false" afterPath="$PROJECT_DIR$/Audio/transformer-asr/refs/包教包会！从零实现基于Transformer的语音识别(ASR)模型 - 知乎.pdf" afterPathEscaped="$PROJECT_DIR$/Audio/transformer-asr/refs/包教包会！从零实现基于Transformer的语音识别(ASR)模型😘 - 知乎.pdf" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -224,7 +133,17 @@
       <workItem from="1756197192522" duration="25161000" />
       <workItem from="1756275278667" duration="5731000" />
       <workItem from="1756283828575" duration="75000" />
+      <workItem from="1756284072203" duration="388000" />
     </task>
+    <task id="LOCAL-00001" summary="change directory">
+      <option name="closed" value="true" />
+      <created>1756284224421</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1756284224421</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -232,7 +151,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="add files" />
-    <option name="LAST_COMMIT_MESSAGE" value="add files" />
+    <MESSAGE value="change directory" />
+    <option name="LAST_COMMIT_MESSAGE" value="change directory" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
