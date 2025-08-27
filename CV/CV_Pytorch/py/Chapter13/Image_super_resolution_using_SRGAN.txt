@@ -1,0 +1,48 @@
+import os
+if not os.path.exists('srgan.pth.tar'):
+    !pip install -q torch_snippets
+    !wget -q https://raw.githubusercontent.com/sizhky/a-PyTorch-Tutorial-to-Super-Resolution/master/models.py -O models.py
+    from pydrive.auth import GoogleAuth
+    from pydrive.drive import GoogleDrive
+    from google.colab import auth
+    from oauth2client.client import GoogleCredentials
+
+    auth.authenticate_user()
+    gauth = GoogleAuth()
+    gauth.credentials = GoogleCredentials.get_application_default()
+    drive = GoogleDrive(gauth)
+
+    downloaded = drive.CreateFile({'id': '1_PJ1Uimbr0xrPjE8U3Q_bG7XycGgsbVo'})
+    downloaded.GetContentFile('srgan.pth.tar')
+    from torch_snippets import *
+    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+model = torch.load('srgan.pth.tar', map_location='cpu')['generator'].to(device)
+model.eval()
+
+!wget https://www.dropbox.com/s/nmzwu68nrl9j0lf/Hema6.JPG
+
+preprocess = T.Compose([
+    T.ToTensor(),
+    T.Normalize([0.485, 0.456, 0.406],
+                [0.229, 0.224, 0.225]),
+    T.Lambda(lambda x: x.to(device))
+])
+
+postprocess = T.Compose([
+    T.Lambda(lambda x: (x.cpu().detach()+1)/2),
+    T.ToPILImage()
+])
+
+image = readPIL('Hema6.JPG')
+image.size
+# (260,181)
+image = image.resize((130,90))
+im = preprocess(image)
+
+sr = model(im[None])[0]
+sr = postprocess(sr)
+
+subplots([image, sr], nc=2, figsize=(10,10), titles=['Original image','High resolution image'])
+
+

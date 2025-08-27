@@ -1,0 +1,185 @@
+!pip install -qU openimages torch_snippets
+
+from torch_snippets import *
+!wget -O train-annotations-object-segmentation.csv -q https://storage.googleapis.com/openimages/v5/train-annotations-object-segmentation.csv
+!wget -O classes.csv -q https://raw.githubusercontent.com/openimages/dataset/master/dict.csv 
+
+from torch_snippets import *
+
+required_classes = 'person,dog,bird,car,elephant,football,jug,laptop,Mushroom,Pizza,Rocket,Shirt,Traffic sign,Watermelon,Zebra'
+required_classes = [c.lower() for c in required_classes.lower().split(',')]
+
+classes = pd.read_csv('classes.csv', header=None)
+classes.columns = ['class','class_name']
+classes = classes[classes['class_name'].map(lambda x: x in required_classes)]
+
+from torch_snippets import *
+df = pd.read_csv('train-annotations-object-segmentation.csv')
+df.head()
+
+data = pd.merge(df, classes, left_on='LabelName', right_on='class')
+
+subset_data = data.groupby('class_name').agg({'ImageID': lambda x: list(x)[:500]})
+subset_data = flatten(subset_data.ImageID.tolist())
+subset_data = data[data['ImageID'].map(lambda x: x in subset_data)]
+subset_masks = subset_data['MaskPath'].tolist()
+
+!mkdir -p masks
+for c in Tqdm('0123456789abcdef'):
+    !wget -q https://storage.googleapis.com/openimages/v5/train-masks/train-masks-{c}.zip
+    !unzip -q train-masks-{c}.zip -d tmp_masks
+    !rm train-masks-{c}.zip
+    tmp_masks = Glob('tmp_masks', silent=True)
+    items = [(m,fname(m)) for m in tmp_masks]
+    items = [(i,j) for (i,j) in items if j in subset_masks]
+    for i,j in items:
+        os.rename(i, f'masks/{j}')
+    !rm -rf tmp_masks
+
+masks = Glob('masks')
+masks = [fname(mask) for mask in masks]
+
+subset_data = subset_data[subset_data['MaskPath'].map(lambda x: x in masks)]
+subset_imageIds = subset_data['ImageID'].tolist()
+
+from openimages.download import _download_images_by_id
+!mkdir images
+_download_images_by_id(subset_imageIds, 'train', './images/')
+
+import zipfile
+files = Glob('images') + Glob('masks') + ['train-annotations-object-segmentation.csv', 'classes.csv']
+with zipfile.ZipFile('data.zip','w') as zipme:
+    for file in Tqdm(files):
+        zipme.write(file, compress_type=zipfile.ZIP_DEFLATED)
+
+!mkdir -p train/
+!mv images train/myData2020
+!mv masks train/annotations
+
+!pip install git+git://github.com/waspinator/pycococreator.git@0.2.0
+import datetime
+
+INFO = {
+    "description": "MyData2020",
+    "url": "None",
+    "version": "1.0",
+    "year": 2020,
+    "contributor": "sizhky",
+    "date_created": datetime.datetime.utcnow().isoformat(' ')
+}
+
+LICENSES = [
+    {
+        "id": 1,
+        "name": "MIT"
+    }
+]
+
+CATEGORIES = [{'id': id+1, 'name': name.replace('/',''), 'supercategory': 'none'} for id,(_,(name, clss_name)) in enumerate(classes.iterrows())]
+
+!pip install pycocotools
+from pycococreatortools import pycococreatortools
+from os import listdir
+from os.path import isfile, join
+from PIL import Image
+
+coco_output = {
+    "info": INFO,
+    "licenses": LICENSES,
+    "categories": CATEGORIES,
+    "images": [],
+    "annotations": []
+}
+
+ROOT_DIR = "train"
+IMAGE_DIR, ANNOTATION_DIR = 'train/myData2020/', 'train/annotations/'
+image_files = [f for f in listdir(IMAGE_DIR) if isfile(join(IMAGE_DIR, f))]
+annotation_files = [f for f in listdir(ANNOTATION_DIR) if isfile(join(ANNOTATION_DIR, f))]
+
+image_id = 1
+# go through each image
+for image_filename in Tqdm(image_files):
+    image = Image.open(IMAGE_DIR + '/' + image_filename)
+    image_info = pycococreatortools.create_image_info(image_id, os.path.basename(image_filename), image.size)
+    coco_output["images"].append(image_info)
+    image_id = image_id + 1
+
+segmentation_id = 1
+for annotation_filename in Tqdm(annotation_files):
+    image_id = [f for f in coco_output['images'] if stem(f['file_name'])==annotation_filename.split('_')[0]][0]['id']
+    class_id = [x['id'] for x in CATEGORIES if x['name'] in annotation_filename][0]
+    category_info = {'id': class_id, 'is_crowd': 'crowd' in image_filename}
+    binary_mask = np.asarray(Image.open(f'{ANNOTATION_DIR}/{annotation_filename}').convert('1')).astype(np.uint8)
+ 
+    annotation_info = pycococreatortools.create_annotation_info(segmentation_id, image_id, category_info, binary_mask, image.size, tolerance=2)
+
+    if annotation_info is not None:
+        coco_output["annotations"].append(annotation_info)
+        segmentation_id = segmentation_id + 1
+
+coco_output['categories'] = [{'id': id+1, 'name': clss_name, 'supercategory': 'none'} for id,(_,(name, clss_name)) in enumerate(classes.iterrows())]
+
+import json
+with open('images.json', 'w') as output_json_file:
+    json.dump(coco_output, output_json_file)
+
+!pip install detectron2 -f https://dl.fbaipublicfiles.com/detectron2/wheels/cu101/torch1.7/index.html
+!pip install pyyaml==5.1 pycocotools>=2.0.1
+
+from torch_snippets import *
+required_classes = 'person,dog,bird,car,elephant,football,jug,laptop,Mushroom,Pizza,Rocket,Shirt,Traffic sign,Watermelon,Zebra'
+required_classes = [c.lower() for c in required_classes.lower().split(',')]
+
+classes = pd.read_csv('classes.csv', header=None)
+classes.columns = ['class','class_name']
+classes = classes[classes['class_name'].map(lambda x: x in required_classes)]
+
+from detectron2 import model_zoo
+from detectron2.engine import DefaultPredictor
+from detectron2.config import get_cfg
+from detectron2.utils.visualizer import Visualizer
+from detectron2.data import MetadataCatalog, DatasetCatalog
+from detectron2.engine import DefaultTrainer
+
+from detectron2.data.datasets import register_coco_instances
+register_coco_instances("dataset_train", {}, "images.json", "train/myData2020")
+
+cfg = get_cfg()
+cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
+cfg.DATASETS.TRAIN = ("dataset_train",)
+cfg.DATASETS.TEST = ()
+cfg.DATALOADER.NUM_WORKERS = 2
+cfg.MODEL.WEIGHTS = model_zoo.get_checkpoint_url("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml") # pretrained weights
+cfg.SOLVER.IMS_PER_BATCH = 2
+cfg.SOLVER.BASE_LR = 0.00025 # pick a good LR
+cfg.SOLVER.MAX_ITER = 5000 # instead of epochs, we train on 5000 batches
+cfg.MODEL.ROI_HEADS.BATCH_SIZE_PER_IMAGE = 512
+cfg.MODEL.ROI_HEADS.NUM_CLASSES = len(classes) 
+
+os.makedirs(cfg.OUTPUT_DIR, exist_ok=True)
+trainer = DefaultTrainer(cfg) 
+trainer.resume_or_load(resume=False)
+trainer.train()
+
+!cp output/model_final.pth output/trained_model.pth
+
+cfg.MODEL.WEIGHTS = os.path.join(cfg.OUTPUT_DIR, "trained_model.pth")
+cfg.MODEL.ROI_HEADS.SCORE_THRESH_TEST = 0.25
+predictor = DefaultPredictor(cfg)
+from detectron2.utils.visualizer import ColorMode
+files = Glob('train/myData2020')
+for _ in range(30):
+    im = cv2.imread(choose(files))
+    outputs = predictor(im)
+    v = Visualizer(im[:, :, ::-1],
+                    scale=0.5,
+                    metadata=MetadataCatalog.get("dataset_train"),
+                    instance_mode=ColorMode.IMAGE_BW 
+# remove the colors of unsegmented pixels. 
+# This option is only available for segmentation models
+    )
+
+    out = v.draw_instance_predictions(outputs["instances"].to("cpu"))
+    show(out.get_image())
+
+

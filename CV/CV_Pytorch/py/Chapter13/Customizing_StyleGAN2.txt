@@ -1,0 +1,119 @@
+import os
+if not os.path.exists('pytorch_stylegan_encoder'):
+    !git clone https://github.com/jacobhallberg/pytorch_stylegan_encoder.git
+    %cd pytorch_stylegan_encoder
+    !git submodule update --init --recursive
+    !wget -q https://github.com/jacobhallberg/pytorch_stylegan_encoder/releases/download/v1.0/trained_models.zip
+    !unzip -q trained_models.zip
+    !rm trained_models.zip
+    !pip install -qU torch_snippets
+    !mv trained_models/stylegan_ffhq.pth InterFaceGAN/models/pretrain
+else:
+    %cd pytorch_stylegan_encoder
+    
+from torch_snippets import *
+
+from InterFaceGAN.models.stylegan_generator import StyleGANGenerator
+from models.latent_optimizer import PostSynthesisProcessing
+
+synthesizer = StyleGANGenerator("stylegan_ffhq").model.synthesis
+mapper = StyleGANGenerator("stylegan_ffhq").model.mapping
+trunc = StyleGANGenerator("stylegan_ffhq").model.truncation
+
+post_processing = PostSynthesisProcessing()
+post_process = lambda image: post_processing(image).detach().cpu().numpy().astype(np.uint8)[0]
+
+def latent2image(latent):
+    img = post_process(synthesizer(latent))
+    img = img.transpose(1,2,0)
+    return img
+
+rand_latents = torch.randn(1,512).cuda()
+show(latent2image(trunc(mapper(rand_latents))), sz=5)
+
+!wget -q https://www.dropbox.com/s/lpw10qawsc5ipbn/MyImage.JPG -O MyImage.jpg
+!git clone https://github.com/sizhky/stylegan-encoder.git
+!mkdir -p stylegan-encoder/raw_images
+!mkdir -p stylegan-encoder/aligned_images
+!mv MyImage.jpg stylegan-encoder/raw_images
+
+!python stylegan-encoder/align_images.py stylegan-encoder/raw_images/ stylegan-encoder/aligned_images/
+!mv stylegan-encoder/aligned_images/* ./MyImage.jpg
+
+from PIL import Image
+img = Image.open('MyImage.jpg')
+show(np.array(img), sz=4, title='original')
+
+!python encode_image.py ./MyImage.jpg\
+    pred_dlatents_myImage.npy\
+    --use_latent_finder true\
+    --image_to_latent_path ./trained_models/image_to_latent.pt
+
+pred_dlatents = np.load('pred_dlatents_myImage.npy')
+pred_dlatent = torch.from_numpy(pred_dlatents).float().cuda()
+pred_image = latent2image(pred_dlatent)
+show(pred_image, sz=4, title='synthesized')
+
+idxs_to_swap = slice(0,3)
+my_latents = torch.Tensor(np.load('pred_dlatents_myImage.npy', allow_pickle=True))
+
+A, B = latent2image(my_latents.cuda()), latent2image(trunc(mapper(rand_latents)))
+generated_image_latents = trunc(mapper(rand_latents))
+
+x = my_latents.clone()
+x[:,idxs_to_swap] = generated_image_latents[:,idxs_to_swap]
+a = latent2image(x.float().cuda())
+
+x = generated_image_latents.clone()
+x[:,idxs_to_swap] = my_latents[:,idxs_to_swap]
+b = latent2image(x.float().cuda())
+
+subplots([A,a,B,b], figsize=(7,8), nc=2, suptitle='Transfer high level features')
+
+idxs_to_swap
+
+idxs_to_swap = slice(4,15)
+my_latents = torch.Tensor(np.load('pred_dlatents_myImage.npy', allow_pickle=True))
+
+A, B = latent2image(my_latents.cuda()), latent2image(trunc(mapper(rand_latents)))
+generated_image_latents = trunc(mapper(rand_latents))
+
+x = my_latents.clone()
+x[:,idxs_to_swap] = generated_image_latents[:,idxs_to_swap]
+a = latent2image(x.float().cuda())
+
+x = generated_image_latents.clone()
+x[:,idxs_to_swap] = my_latents[:,idxs_to_swap]
+b = latent2image(x.float().cuda())
+
+subplots([A,a,B,b], figsize=(7,8), nc=2, suptitle='Transfer granular features')
+
+idxs_to_swap = slice(16,18)
+my_latents = torch.Tensor(np.load('pred_dlatents_myImage.npy', allow_pickle=True))
+
+A, B = latent2image(my_latents.cuda()), latent2image(trunc(mapper(rand_latents)))
+generated_image_latents = trunc(mapper(rand_latents))
+
+x = my_latents.clone()
+x[:,idxs_to_swap] = generated_image_latents[:,idxs_to_swap]
+a = latent2image(x.float().cuda())
+
+x = generated_image_latents.clone()
+x[:,idxs_to_swap] = my_latents[:,idxs_to_swap]
+b = latent2image(x.float().cuda())
+
+subplots([A,a,B,b], figsize=(7,8), nc=2, suptitle='Transfer general image features')
+
+!python InterFaceGAN/edit.py\
+ -m stylegan_ffhq\
+ -o results_new_smile\
+ -b InterFaceGAN/boundaries/stylegan_ffhq_smile_w_boundary.npy\
+ -i pred_dlatents_myImage.npy\
+ -s WP\
+ --steps 20
+
+generated_faces = glob.glob('results_new_smile/*.jpg')
+
+subplots([read(im,1) for im in sorted(generated_faces)],figsize=(10,10))
+
+

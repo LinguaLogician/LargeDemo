@@ -1,0 +1,66 @@
+import os
+if not os.path.exists('darknet'):
+    !git clone https://github.com/AlexeyAB/darknet
+    %cd darknet
+    !sed -i 's/OPENCV=0/OPENCV=1/' Makefile
+    # !!! In case you dont have a GPU, make sure to comment out the below 3 lines !!! #
+    !sed -i 's/GPU=0/GPU=1/' Makefile
+    !sed -i 's/CUDNN=0/CUDNN=1/' Makefile
+    !sed -i 's/CUDNN_HALF=0/CUDNN_HALF=1/' Makefile
+    !make
+    !pip install -q torch_snippets
+    !wget --quiet https://www.dropbox.com/s/agmzwk95v96ihic/open-images-bus-trucks.tar.xz
+    !tar -xf open-images-bus-trucks.tar.xz
+    !rm open-images-bus-trucks.tar.xz
+    !wget --quiet https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v3_optimal/yolov4.weights
+
+!./darknet detector test cfg/coco.data cfg/yolov4.cfg yolov4.weights data/person.jpg
+
+%%writefile data/obj.names
+bus
+truck
+
+%%writefile data/obj.data
+classes = 2
+train = data/train.txt
+valid = data/val.txt
+names = data/obj.names
+backup = backup/
+
+!mkdir -p data/obj
+!cp -r open-images-bus-trucks/images/* data/obj/
+!cp -r open-images-bus-trucks/yolo_labels/all/{train,val}.txt data/
+!cp -r open-images-bus-trucks/yolo_labels/all/labels/*.txt data/obj/
+
+# create a copy of existing configuration and modify it in place
+!cp cfg/yolov4-tiny-custom.cfg cfg/yolov4-tiny-bus-trucks.cfg
+# max_batches to 4000 (since the dataset is small enough)
+!sed -i 's/max_batches = 500200/max_batches=4000/' cfg/yolov4-tiny-bus-trucks.cfg
+# number of sub-batches per batch
+!sed -i 's/subdivisions=1/subdivisions=16/' cfg/yolov4-tiny-bus-trucks.cfg
+# number of batches after which learning rate is decayed
+!sed -i 's/steps=400000,450000/steps=3200,3600/' cfg/yolov4-tiny-bus-trucks.cfg
+# number of classes is 2 as opposed to 80 (which is the number of COCO classes)
+!sed -i 's/classes=80/classes=2/g' cfg/yolov4-tiny-bus-trucks.cfg
+# in the classification and regression heads, change number of output convolution filters
+# from 255 -> 21 and 57 -> 33, since we have fewer classes we don't need as many filters
+!sed -i 's/filters=255/filters=21/g' cfg/yolov4-tiny-bus-trucks.cfg
+!sed -i 's/filters=57/filters=33/g' cfg/yolov4-tiny-bus-trucks.cfg
+
+!wget --quiet https://github.com/AlexeyAB/darknet/releases/download/darknet_yolo_v4_pre/yolov4-tiny.conv.29
+!cp yolov4-tiny.conv.29 build/darknet/x64/
+
+!./darknet detector train data/obj.data cfg/yolov4-tiny-bus-trucks.cfg yolov4-tiny.conv.29 -dont_show -mapLastAt
+
+from torch_snippets import Glob, stem, show, read
+# upload your own images to a folder
+image_paths = Glob('images-of-trucks-and-busses')
+for f in image_paths:
+    !./darknet detector test data/obj.data cfg/yolov4-tiny-bus-trucks.cfg\
+    backup/yolov4-tiny-bus-trucks_4000.weights {f}
+    !mv predictions.jpg {stem(f)}_pred.jpg
+
+for i in Glob('*_pred.jpg', silent=True):
+    show(read(i, 1), sz=20)
+
+

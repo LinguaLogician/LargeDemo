@@ -1,0 +1,14 @@
+!wget https://www.dropbox.com/s/l98leemr7r5stnm/Hemanvi.jpeg
+
+import cv2, matplotlib.pyplot as plt
+%matplotlib inline
+img = cv2.imread('Hemanvi.jpeg') 
+
+img = img[50:250,40:240,:]
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) 
+
+
+plt.imshow(img)
+print(img.shape)
+
+

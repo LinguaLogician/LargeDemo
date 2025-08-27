@@ -1,0 +1,17 @@
+import torch
+from torch import nn
+
+class ResLayer(nn.Module):
+     def __init__(self,ni,no,kernel_size,stride=1):
+        super(ResLayer, self).__init__()
+        padding = kernel_size - 2
+        self.conv = nn.Sequential(
+            nn.Conv2d(ni, no, kernel_size, stride, 
+                      padding=padding),
+            nn.ReLU()
+        )
+
+    def forward(self, x):
+        return self.conv(x) + x
+
+

@@ -1,0 +1,190 @@
+!wget https://www.dropbox.com/s/5jh4hpuk2gcxaaq/all.zip
+!unzip all.zip
+
+import torch
+from torch import nn
+from torch.utils.data import TensorDataset, Dataset, DataLoader
+from torch.optim import SGD, Adam
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+from torchvision import datasets
+import numpy as np, cv2
+import matplotlib.pyplot as plt
+from glob import glob
+%matplotlib inline
+from imgaug import augmenters as iaa
+
+tfm = iaa.Sequential(iaa.Resize(28))
+class XO(Dataset):
+    def __init__(self, folder):
+        self.files = glob(folder)
+    def __len__(self): return len(self.files)
+    def __getitem__(self, ix):
+        f = self.files[ix]
+        im = tfm.augment_image(cv2.imread(f)[:,:,0])
+        im = im[None]
+        cl = f.split('/')[-1].split('@')[0] == 'x'
+        return torch.tensor(1 - im/255).to(device).float(), torch.tensor([cl]).float().to(device)
+
+data = XO('/content/all/*')
+
+R, C = 7,7
+fig, ax = plt.subplots(R, C, figsize=(5,5))
+for label_class, plot_row in enumerate(ax):
+    for plot_cell in plot_row:
+        plot_cell.grid(False); plot_cell.axis('off')
+        ix = np.random.choice(1000)
+        im, label = data[ix]
+        print()
+        plot_cell.imshow(im[0].cpu(), cmap='gray')
+plt.tight_layout()
+
+from torch.optim import SGD, Adam
+def get_model():
+    model = nn.Sequential(
+        nn.Conv2d(1, 64, kernel_size=3),
+        nn.MaxPool2d(2),
+        nn.ReLU(),
+        nn.Conv2d(64, 128, kernel_size=3),
+        nn.MaxPool2d(2),
+        nn.ReLU(),
+        nn.Flatten(),
+        nn.Linear(3200, 256),
+        nn.ReLU(),
+        nn.Linear(256, 1),
+        nn.Sigmoid()
+    ).to(device)
+
+    loss_fn = nn.BCELoss()
+    optimizer = Adam(model.parameters(), lr=1e-3)
+    return model, loss_fn, optimizer
+
+def train_batch(x, y, model, opt, loss_fn):
+    prediction = model(x)
+    batch_loss = loss_fn(prediction, y)
+    batch_loss.backward()
+    optimizer.step()
+    optimizer.zero_grad()
+    return batch_loss.item()
+
+def accuracy(x, y, model):
+    with torch.no_grad():
+        prediction = model(x)
+    max_values, argmaxes = prediction.max(-1)
+    is_correct = argmaxes == y
+    return is_correct.cpu().numpy().tolist()
+
+trn_dl = DataLoader(XO('/content/all/*'), batch_size=32, drop_last=True)
+
+def val_loss(x, y, model):
+    with torch.no_grad():
+        prediction = model(x)
+    val_loss = loss_fn(prediction, y)
+    return val_loss.item()
+
+model, loss_fn, optimizer = get_model()
+
+from torchsummary import summary
+model, loss_fn, optimizer = get_model()
+summary(model, input_size=(1,28,28))
+
+for epoch in range(5):
+    for ix, batch in enumerate(iter(trn_dl)):
+        x, y = batch
+        batch_loss = train_batch(x, y, model, optimizer, loss_fn)
+
+
+
+
+
+im, c = trn_dl.dataset[2]
+plt.imshow(im[0].cpu())
+plt.show()
+
+first_layer = nn.Sequential(*list(model.children())[:1])
+intermediate_output = first_layer(im[None])[0].detach()
+
+n = 8
+fig, ax = plt.subplots(n, n, figsize=(10,10))
+for ix, axis in enumerate(ax.flat):
+    axis.set_title('Filter: '+str(ix))
+    axis.imshow(intermediate_output[ix].cpu())
+plt.tight_layout()
+plt.show()
+
+list(model.children())
+
+second_layer = nn.Sequential(*list(model.children())[:4])
+second_intermediate_output = second_layer(im[None])[0].detach()
+
+second_intermediate_output.shape
+
+n = 11
+fig, ax = plt.subplots(n, n, figsize=(10,10))
+for ix, axis in enumerate(ax.flat):
+    axis.imshow(second_intermediate_output[ix].cpu())
+    axis.set_title(str(ix))
+plt.tight_layout()
+plt.show()
+
+im.shape
+
+x, y = next(iter(trn_dl))
+x2 = x[y==0]
+len(x2)
+
+x2 = x2.view(-1,1,28,28)
+
+first_layer = nn.Sequential(*list(model.children())[:1])
+first_layer_output = first_layer(x2).detach()
+
+n = 4
+fig, ax = plt.subplots(n, n, figsize=(10,10))
+for ix, axis in enumerate(ax.flat):
+    axis.imshow(first_layer_output[ix,4,:,:].cpu())
+    axis.set_title(str(ix))
+plt.tight_layout()
+plt.show()
+
+
+
+second_layer = nn.Sequential(*list(model.children())[:4])
+second_intermediate_output = second_layer(x2).detach()
+
+second_intermediate_output.shape
+
+n = 4
+fig, ax = plt.subplots(n, n, figsize=(10,10))
+for ix, axis in enumerate(ax.flat):
+    axis.imshow(second_intermediate_output[ix,34,:,:].cpu())
+    axis.set_title(str(ix))
+plt.tight_layout()
+plt.show()
+
+
+
+len(XO('/content/all/*'))
+
+custom_dl = DataLoader(XO('/content/all/*'), batch_size=2498, drop_last=True)
+
+x, y = next(iter(custom_dl))
+
+x2 = x[y==0]
+
+len(x2)
+
+x2 = x2.view(len(x2),1,28,28
+             )
+
+flatten_layer = nn.Sequential(*list(model.children())[:7])
+flatten_layer_output = flatten_layer(x2).detach()
+
+flatten_layer_output.shape
+
+plt.figure(figsize=(100,10))
+plt.imshow(flatten_layer_output.cpu())
+
+
+
+
+
+

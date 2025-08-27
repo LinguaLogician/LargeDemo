@@ -1,0 +1,39 @@
+!pip install selectivesearch
+!pip install torch_snippets
+from torch_snippets import *
+import selectivesearch
+from skimage.segmentation import felzenszwalb
+
+!wget https://www.dropbox.com/s/l98leemr7r5stnm/Hemanvi.jpeg
+img = read('Hemanvi.jpeg', 1)
+
+segments_fz = felzenszwalb(img, scale=200)
+
+subplots([img, segments_fz], titles=['Original Image','Image post \nfelzenszwalb segmentation'], figsize=(10,10), nc=2)
+
+
+
+def extract_candidates(img):
+    img_lbl, regions = selectivesearch.selective_search(img, scale=200, min_size=100)
+    img_area = np.prod(img.shape[:2])
+    candidates = []
+    for r in regions:
+        if r['rect'] in candidates: continue
+        if r['size'] < (0.05*img_area): continue
+        if r['size'] > (1*img_area): continue
+        x, y, w, h = r['rect']
+        candidates.append(list(r['rect']))
+    return candidates
+
+
+!pip install selectivesearch
+!pip install torch_snippets
+from torch_snippets import *
+import selectivesearch
+!wget https://www.dropbox.com/s/l98leemr7r5stnm/Hemanvi.jpeg
+img = read('Hemanvi.jpeg', 1)
+
+candidates = extract_candidates(img)
+show(img, bbs = candidates)
+
+

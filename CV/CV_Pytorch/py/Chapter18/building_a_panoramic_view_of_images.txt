@@ -1,0 +1,53 @@
+!pip install torch_snippets
+from torch_snippets import *
+# feature_extractor = 'orb' 
+# feature_matching = 'bf'
+
+!wget https://www.dropbox.com/s/mfg1codtc2rue84/g1.png
+!wget https://www.dropbox.com/s/4yhui8s1xjndavm/g2.png
+
+queryImg = read('g1.png', 1)
+queryImg_gray = read('g1.png')
+
+trainImg = read('g2.png', 1)
+trainImg_gray = read('g2.png')
+
+
+subplots([trainImg, queryImg], nc=2, figsize=(10,5), titles = ['Query image','Training image (Image to be stitched to Query image)'])
+
+# Fetch the keypoints and features corresponding to the images
+descriptor = cv2.ORB_create()
+kpsA, featuresA = descriptor.detectAndCompute(trainImg_gray, None)
+kpsB, featuresB = descriptor.detectAndCompute(queryImg_gray, None)
+
+# Draw the keypoints obtained on images
+img_kpsA = cv2.drawKeypoints(trainImg_gray,kpsA,None,color=(0,255,0))
+img_kpsB = cv2.drawKeypoints(queryImg_gray,kpsB,None,color=(0,255,0))
+subplots([img_kpsB, img_kpsA], nc=2, figsize=(10,5), titles=['Query image with keypoints','Training image with keypoints'])
+
+bf = cv2.BFMatcher(cv2.NORM_HAMMING)
+best_matches = bf.match(featuresA,featuresB)
+matches = sorted(best_matches, key = lambda x:x.distance)
+
+img3 = cv2.drawMatches(trainImg,kpsA,queryImg,kpsB,matches[:100],                           None,flags=cv2.DrawMatchesFlags_NOT_DRAW_SINGLE_POINTS)
+show(img3)
+
+kpsA = np.float32([kp.pt for kp in kpsA])
+kpsB = np.float32([kp.pt for kp in kpsB])
+ptsA = np.float32([kpsA[m.queryIdx] for m in matches])
+ptsB = np.float32([kpsB[m.trainIdx] for m in matches])
+
+(H, status) = cv2.findHomography(ptsA, ptsB, cv2.RANSAC,4)
+
+width = trainImg.shape[1] + queryImg.shape[1]
+height = trainImg.shape[0] + queryImg.shape[0]
+
+result = cv2.warpPerspective(trainImg, H, (width, height))
+result[0:queryImg.shape[0], 0:queryImg.shape[1]] = queryImg
+
+_x = np.nonzero(result.sum(0).sum(-1) == 0)[0][0]
+_y = np.nonzero(result.sum(1).sum(-1) == 0)[0][0]
+
+show(result[:_y,:_x])
+
+

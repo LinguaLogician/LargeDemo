@@ -1,0 +1,25 @@
+from torchvision import datasets
+import torch
+data_folder = '/content/' # This can be any directory you want to download FMNIST to
+fmnist = datasets.FashionMNIST(data_folder, download=True, train=True)
+
+tr_images = fmnist.data
+tr_targets = fmnist.targets
+
+val_fmnist = datasets.FashionMNIST(data_folder, download=True, train=False)
+val_images = val_fmnist.data
+val_targets = val_fmnist.targets
+
+from imgaug import augmenters as iaa
+aug = iaa.Sequential([
+              iaa.Affine(translate_px={'x':(-10,10)}, mode='constant'),
+            ])
+
+%%time
+for i in range(32):
+  aug.augment_image(tr_images[i])
+
+%%time
+x = aug.augment_images(tr_images[:32])
+
+

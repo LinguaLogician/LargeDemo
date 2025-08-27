@@ -1,0 +1,183 @@
+%%capture
+!pip install -U imgaug
+
+import imgaug
+print(imgaug.__version__)
+
+import imgaug.augmenters as iaa
+
+from torchvision import datasets
+import torch
+data_folder = '/content/' # This can be any directory you want to download FMNIST to
+fmnist = datasets.FashionMNIST(data_folder, download=True, train=True)
+
+tr_images = fmnist.data
+tr_targets = fmnist.targets
+
+import matplotlib.pyplot as plt
+%matplotlib inline
+import numpy as np
+from torch.utils.data import Dataset, DataLoader
+import torch
+import torch.nn as nn
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+def to_numpy(tensor):
+    return tensor.cpu().detach().numpy()
+
+plt.imshow(tr_images[0], cmap='gray')
+plt.title('Original image')
+
+aug = iaa.Affine(scale=2)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])))
+plt.title('Scaled image')
+
+aug = iaa.Affine(translate_px=10)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Translated image by 10 pixels (right and bottom)')
+
+aug = iaa.Affine(translate_px={'x':10,'y':2})
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Translation of 10 pixels \nacross columns and 2 pixels over rows')
+
+aug = iaa.Affine(rotate=30)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image by 30 degrees')
+
+aug = iaa.Affine(rotate=-30)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image by -30 degrees')
+
+aug = iaa.Affine(shear=30)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Shear of image by 30 degrees')
+
+aug = iaa.Affine(shear=-30)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Shear of image by -30 degrees')
+
+plt.figure(figsize=(20,20))
+plt.subplot(161)
+plt.imshow(tr_images[0], cmap='gray')
+plt.title('Original image')
+plt.subplot(162)
+aug = iaa.Affine(scale=2, fit_output=True)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Scaled image')
+plt.subplot(163)
+aug = iaa.Affine(translate_px={'x':10,'y':2}, fit_output=True)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Translation of 10 pixels across \ncolumns and 2 pixels over rows')
+plt.subplot(164)
+aug = iaa.Affine(rotate=30, fit_output=True)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image \nby 30 degrees')
+plt.subplot(165)
+aug = iaa.Affine(shear=30, fit_output=True)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Shear of image \nby 30 degrees')
+
+plt.figure(figsize=(20,20))
+plt.subplot(161)
+plt.imshow(tr_images[0], cmap='gray')
+plt.title('Original image')
+plt.subplot(162)
+aug = iaa.Affine(scale=2, fit_output=True)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Scaled image')
+plt.subplot(163)
+aug = iaa.Affine(translate_px={'x':10,'y':2}, fit_output=True, cval = 255)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Translation of 10 pixels across \ncolumns and 2 pixels over rows')
+plt.subplot(164)
+aug = iaa.Affine(rotate=30, fit_output=True)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image \nby 30 degrees')
+plt.subplot(165)
+aug = iaa.Affine(shear=30, fit_output=True)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Shear of image \nby 30 degrees')
+
+aug = iaa.Affine(rotate=30, fit_output=True, cval=255)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image by 30 degrees')
+
+plt.figure(figsize=(20,20))
+plt.subplot(161)
+aug = iaa.Affine(rotate=30, fit_output=True, cval=0, mode='constant')
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image by \n30 degrees with constant mode')
+plt.subplot(162)
+aug = iaa.Affine(rotate=30, fit_output=True, cval=0, mode='edge')
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image by 30 degrees \n with edge mode')
+plt.subplot(163)
+aug = iaa.Affine(rotate=30, fit_output=True, cval=0, mode='symmetric')
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image by \n30 degrees with symmetric mode')
+plt.subplot(164)
+aug = iaa.Affine(rotate=30, fit_output=True, cval=0, mode='reflect')
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image by 30 degrees \n with reflect mode')
+plt.subplot(165)
+aug = iaa.Affine(rotate=30, fit_output=True, cval=0, mode='wrap')
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.title('Rotation of image by \n30 degrees with wrap mode')
+
+plt.figure(figsize=(20,20))
+plt.subplot(151)
+aug = iaa.Affine(rotate=(-45,45), fit_output=True, cval=0, mode='constant')
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.subplot(152)
+aug = iaa.Affine(rotate=(-45,45), fit_output=True, cval=0, mode='constant')
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.subplot(153)
+aug = iaa.Affine(rotate=(-45,45), fit_output=True, cval=0, mode='constant')
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+plt.subplot(154)
+aug = iaa.Affine(rotate=(-45,45), fit_output=True, cval=0, mode='constant')
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+
+
+
+aug = iaa.Multiply(1)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray')
+
+aug = iaa.Multiply(0.5)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray',vmin = 0, vmax = 255)
+plt.title('Pixels multiplied by 0.5')
+
+aug = iaa.LinearContrast(0.5)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray',vmin = 0, vmax = 255)
+plt.title('Pixel contrast by 0.5')
+
+aug = iaa.Dropout(p=0.2)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray',vmin = 0, vmax = 255)
+plt.title('Random 20% pixel dropout')
+
+aug = iaa.SaltAndPepper(0.2)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray',vmin = 0, vmax = 255)
+plt.title('Random 20% salt and pepper noise')
+
+plt.figure(figsize=(10,10))
+plt.subplot(121)
+aug = iaa.Dropout(p=0.2,)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray',vmin = 0, vmax = 255)
+plt.title('Random 20% pixel dropout')
+plt.subplot(122)
+aug = iaa.SaltAndPepper(0.2,)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray',vmin = 0, vmax = 255)
+plt.title('Random 20% salt and pepper noise')
+
+seq = iaa.Sequential([
+      iaa.Dropout(p=0.2,),
+    iaa.Affine(rotate=(-30,30))], random_order= True)
+
+plt.imshow(seq.augment_image(to_numpy(tr_images[0])), cmap='gray',vmin = 0, vmax = 255)
+plt.title('Image augmented using a \nrandom orderof the two augmentations')
+
+aug = iaa.GaussianBlur(sigma=1)
+plt.imshow(aug.augment_image(to_numpy(tr_images[0])), cmap='gray',vmin = 0, vmax = 255)
+plt.title('Gaussian blurring of image\n with a sigma of 1')
+
+
